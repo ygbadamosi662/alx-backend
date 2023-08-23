@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-FIFOCache module
+LRUCache module
 """
 from base_caching import BaseCaching
 from typing import Any, Union
 
 
-class FIFOCache(BaseCaching):
+class LRUCache(BaseCaching):
     """
-    A class that uses first in first out for caching
-
+    a class that cache using the Least Recently Used
+    caching algorithm
     Args:
-        BaseCaching (class): base caching model
+        BaseCaching (class): Base caching model
     """
 
     def __init__(self):
@@ -27,16 +27,28 @@ class FIFOCache(BaseCaching):
         for key in sorted(self.cache_data.keys()):
             print("{}: {}".format(key, self.cache_data.get(key)))
 
+    def update_key(self, key: str, item: Any):
+        """
+            update the key value in the cache dict and add it
+            to the last of the dict as recent.
+            Args:
+                key (str): key string
+                item (Any): the value of the key to append
+        """
+        if key in self.cache_data.keys():
+            self.cache_data.pop(key)
+        self.cache_data[key] = item
+
     def put(self, key: str, item: Any):
         """ Add an item in the cache
         """
         if key and item:
-            self.cache_data[key] = item
+            self.update_key(key, item)
 
         if len(self.cache_data) > self.MAX_ITEMS:
-            first: str = sorted(self.cache_data.keys())[0]
-            self.cache_data.pop(first)
-            print('DISCARD: {}'.format(first))
+            least_used: str = list(self.cache_data.keys())[0]
+            self.cache_data.pop(least_used)
+            print('DISCARD: {}'.format(least_used))
 
     def get(self, key: str) -> Union[None, Any]:
         """ Get an item by key

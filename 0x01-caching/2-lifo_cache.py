@@ -34,9 +34,9 @@ class LIFOCache(BaseCaching):
             self.cache_data[key] = item
 
         if len(self.cache_data) > self.MAX_ITEMS:
-            first = sorted(self.cache_data.keys())[0]
-            self.cache_data.pop(first)
-            print('DISCARD: {}'.format(first))
+            last: str = sorted(self.cache_data.keys())[-2]
+            self.cache_data.pop(last)
+            print('DISCARD: {}'.format(last))
 
     def get(self, key: str) -> Union[None, Any]:
         """ Get an item by key
