@@ -1,58 +1,62 @@
 #!/usr/bin/env python3
 """
-LRUCache module
+    A class that applies LRU caching system
 """
+from typing import Any, Optional
 from base_caching import BaseCaching
-from typing import Any, Union
 
 
 class LRUCache(BaseCaching):
     """
-    a class that cache using the Least Recently Used
-    caching algorithm
-    Args:
-        BaseCaching (class): Base caching model
+        a class that cache using the Least Recently Used
+        caching algorithm
+        Args:
+            BaseCaching (class): Base caching model
     """
-
-    def __init__(self):
+    def __init__(self) -> None:
         """
-        Initiliaze the base
+            initialize the base and variable
         """
         super().__init__()
 
-    def print_cache(self):
-        """ Print the cache
-        """
-        print("Current cache:")
-        for key in sorted(self.cache_data.keys()):
-            print("{}: {}".format(key, self.cache_data.get(key)))
-
-    def update_key(self, key: str, item: Any):
+    def update(self, key: str, value: Any) -> None:
         """
             update the key value in the cache dict and add it
             to the last of the dict as recent.
             Args:
                 key (str): key string
-                item (Any): the value of the key to append
+                value (Any): the value of the key to append
         """
-        if key in self.cache_data.keys():
+        if self.cache_data.get(key):  # check if the key is avail then pop
             self.cache_data.pop(key)
-        self.cache_data[key] = item
+        self.cache_data[key] = value
 
-    def put(self, key: str, item: Any):
-        """ Add an item in the cache
+    def put(self, key: str, item: Any) -> None:
+        """
+            assign key to value in the cache dict
+        Args:
+            key (str): the key in string
+            item (Any): the value
         """
         if key and item:
-            self.update_key(key, item)
-
+            self.update(key, item)
         if len(self.cache_data) > self.MAX_ITEMS:
-            least_used: str = list(self.cache_data.keys())[0]
-            self.cache_data.pop(least_used)
-            print('DISCARD: {}'.format(least_used))
+            least: str = list(self.cache_data.keys())[0]
+            self.cache_data.pop(least)
+            print("DISCARD: {}".format(least))
 
-    def get(self, key: str) -> Union[None, Any]:
-        """ Get an item by key
+    def get(self, key: str) -> Optional[Any]:
         """
-        if key and (key in self.cache_data.keys()):
+            get the data with the provided key.
+
+            Args:
+                key (str): the key
+
+            Returns:
+                Optional[Any]: value with any data type
+        """
+        if key:
+            if self.cache_data.get(key):
+                self.update(key, self.cache_data.get(key))
             return self.cache_data.get(key)
         return None
