@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-    A class that applies LRU caching system
+    Defines LRUCache class
 """
 from typing import Any, Optional
 from base_caching import BaseCaching
